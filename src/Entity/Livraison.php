@@ -25,8 +25,8 @@ class Livraison
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_livraison = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $intervalle_temp = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $intervalle_temp = null;
 
     #[ORM\Column]
     private ?float $prix = null;
@@ -80,12 +80,12 @@ class Livraison
         return $this;
     }
 
-    public function getIntervalleTemp(): ?\DateTimeInterface
+    public function getIntervalleTemp(): ?string
     {
         return $this->intervalle_temp;
     }
 
-    public function setIntervalleTemp(\DateTimeInterface $intervalle_temp): static
+    public function setIntervalleTemp(?string $intervalle_temp): static
     {
         $this->intervalle_temp = $intervalle_temp;
 

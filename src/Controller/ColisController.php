@@ -14,11 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/colis')]
 class ColisController extends AbstractController
 {
-    #[Route('/', name: 'app_colis_index', methods: ['GET'])]
-    public function index(ColisRepository $colisRepository): Response
+    #[Route('/{id}', name: 'app_colis_index', methods: ['GET'])]
+    public function index(ColisRepository $colisRepository,$id): Response
     {
+        
+        $colis = $colisRepository->findBy(['livraison' => $id]);
+
         return $this->render('colis/index.html.twig', [
-            'colis' => $colisRepository->findAll(),
+            'colis' => $colis,
         ]);
     }
 
