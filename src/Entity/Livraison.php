@@ -34,6 +34,9 @@ class Livraison
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Colis::class)]
     private Collection $relation;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Localisation $localisation = null;
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
@@ -136,6 +139,18 @@ class Livraison
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getLocalisation(): ?Localisation
+    {
+        return $this->localisation;
+    }
+
+    public function setLocalisation(?Localisation $localisation): static
+    {
+        $this->localisation = $localisation;
+
+        return $this;
     }
 
 }

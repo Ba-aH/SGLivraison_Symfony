@@ -32,8 +32,8 @@
                     <td>{{ livraison.prix }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ path('app_colis_index', {'id': livraison.id}) }}">Inspecter</a>
-                        <a class="btn btn-primary" href="{{ path('app_livraison_edit', {'id': livraison.id}) }}">Confirmer</a>
-                        <a class="btn btn-danger" href="{{ path('app_livraison_edit', {'id': livraison.id}) }}">Signaler un echec</a>
+                        <a class="btn btn-primary" href="{{ path('confirm', {'id': livraison.id}) }}">Confirmer</a>
+                        <a class="btn btn-danger" href="{{ path('echec', {'id': livraison.id}) }}">Signaler un echec</a>
                     </td>
                 </tr>
             {% else %}
