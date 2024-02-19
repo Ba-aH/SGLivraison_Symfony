@@ -19,7 +19,13 @@ class Localisation
     private ?float $latitude = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $longitude = null;  // Corrected property name to $longitude
+    private ?float $longitude = null;  
+
+    #[ORM\Column(nullable: true)]
+    private ?float $fromlatitude = null;  
+
+    #[ORM\Column(nullable: true)]
+    private ?float $fromlongitude = null;  
 
     #[ORM\OneToMany(mappedBy: 'localisation', targetEntity: Livraison::class)]
     private Collection $relation;
@@ -56,6 +62,26 @@ class Localisation
         $this->longitude = $longitude;
 
         return $this;
+    }
+
+    public function getFromlatitude(): ?float
+    {
+        return $this->fromlatitude;
+    }
+
+    public function setFromlatitude(?float $fromlatitude): void
+    {
+        $this->fromlatitude = $fromlatitude;
+    }
+
+    public function getFromlongitude(): ?float
+    {
+        return $this->fromlongitude;
+    }
+
+    public function setFromlongitude(?float $fromlongitude): void
+    {
+        $this->fromlongitude = $fromlongitude;
     }
 
     /**

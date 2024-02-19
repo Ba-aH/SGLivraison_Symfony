@@ -34,8 +34,11 @@ class LocalisationController extends AbstractController
 
         $data = [
             'id' => $place->getId(),
-            'latitude' => $place->getLatitude(),
-            'longitude' => $place->getLongitude(),          
+            'fromlatitude' => $place->getFromlatitude(), 
+            'fromlongitude' => $place->getFromlongitude(), 
+            'tolatitude' => $place->getLatitude(),
+            'tolongitude' => $place->getLongitude(),  
+                    
         ];
         return $this->json($data);
     }
