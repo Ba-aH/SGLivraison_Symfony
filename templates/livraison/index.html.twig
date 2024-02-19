@@ -18,6 +18,7 @@
                 <th>Date_livraison</th>
                 <th>Intervalle_temp</th>
                 <th>Prix</th>
+                <th>place</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -30,8 +31,10 @@
                     <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td>
                     <td>{{ livraison.intervalleTemp }}</td>
                     <td>{{ livraison.prix }}</td>
+                    <td>{{ livraison.localisation }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ path('app_colis_index', {'id': livraison.id}) }}">Inspecter</a>
+                        {# <a class="btn btn-primary" href="{{ path('app_colis_index', {'id': livraison.id, 'localisation': livraison.localisation.id }) }}">Inspecter</a> #}
                         <a class="btn btn-primary" href="{{ path('confirm', {'id': livraison.id}) }}">Confirmer</a>
                         <a class="btn btn-danger" href="{{ path('echec', {'id': livraison.id}) }}">Signaler un echec</a>
                     </td>

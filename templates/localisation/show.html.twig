@@ -7,28 +7,28 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <h1>Localisation</h1>
+<h1>Localisation</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ localisation.id }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ localisation.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longtitude</th>
-                <td>{{ localisation.longtitude }}</td>
-            </tr>
-        </tbody>
-    </table>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ localisation.id }}</td>
+        </tr>
+        <tr>
+            <th>Latitude</th>
+            <td>{{ localisation.latitude }}</td>
+        </tr>
+        <tr>
+            <th>Longitude</th>
+            <td>{{ localisation.longitude }}</td> 
+        </tr>
+    </tbody>
+</table>
 
-    <div class='mappeu'>
+<div class='mappeu'>
     <style>
-    body {
+        body {
             margin: 0;
             padding: 0;
         }
@@ -37,62 +37,58 @@
             width: 100%;
             height: 50vh;
         }
-        </style>
+    </style>
     <div id="map"></div>
     <script>
-    // Map initialization 
-    var map = L.map('map').setView([ 36.76806 , 10.27528], 18);
+        // Map initialization 
+        var map = L.map('map').setView([{{ localisation.latitude }}, {{ localisation.longitude }}], 18);
 
-    //osm layer
-    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-    osm.addTo(map);
+        // osm layer
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        osm.addTo(map);
 
-    if(!navigator.geolocation) {
-        console.log("Your browser doesn't support geolocation feature!")
-    } else {
+        if (!navigator.geolocation) {
+            console.log("Your browser doesn't support geolocation feature!");
+        } else {
             navigator.geolocation.getCurrentPosition(getPosition);
-    }
-
-    var marker, circle;
-
-    function getPosition(position){
-        console.log(position)
-        var lat = position.coords.latitude
-        var long = position.coords.longitude
-        var accuracy = position.coords.accuracy
-
-        if(marker) {
-            map.removeLayer(marker)
         }
 
-        if(circle) {
-            map.removeLayer(circle)
+        var marker, circle;
+
+        function getPosition(position) {
+            console.log(position);
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            var accuracy = position.coords.accuracy;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            if (circle) {
+                map.removeLayer(circle);
+            }
+
+            console.log("Localisation Latitude: {{ localisation.latitude }}");
+            console.log("Localisation Longitude: {{ localisation.longitude }}");
+
+            marker = L.marker([{{ localisation.latitude }}, {{ localisation.longitude }}]);
+            circle = L.circle([{{ localisation.latitude }}, {{ localisation.longitude }}]);
+
+            var featureGroup = L.featureGroup([marker, circle]).addTo(map);
+
+            map.fitBounds(featureGroup.getBounds());
+
+            console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy);
         }
+    </script>
+</div>
 
-        console.log(localisation.latitude)
-        console.log(localisation.longtitude)
-        
-        marker = L.marker([36.7680, 10.27528])
-        circle = L.circle([36.7680, 10.27528])
+<a href="{{ path('app_localisation_index') }}">back to list</a>
 
-        var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+<a href="{{ path('app_localisation_edit', {'id': localisation.id}) }}">edit</a>
 
-        map.fitBounds(featureGroup.getBounds())
-
-        console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
-    }
-
-</script>
-
-    </div>
-
-
-
-    <a href="{{ path('app_localisation_index') }}">back to list</a>
-
-    <a href="{{ path('app_localisation_edit', {'id': localisation.id}) }}">edit</a>
-
-    {{ include('localisation/_delete_form.html.twig') }}
+{{ include('localisation/_delete_form.html.twig') }}
 {% endblock %}

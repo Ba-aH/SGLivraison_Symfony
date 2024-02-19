@@ -23,6 +23,7 @@
                 <th>Prix</th>
                 <th>Poid</th>
                 <th>Actions</th>
+                 <th>place</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
                 <td>{{ coli.reference }}</td>
                 <td>{{ coli.prix }}</td>
                 <td>{{ coli.poid }}</td>
+                
                 <td>
                     <a class="btn btn-primary" href="{{ path('app_colis_show', {'id': coli.id}) }}">Show</a>
                     <a class="btn btn-primary" href="{{ path('app_colis_edit', {'id': coli.id}) }}">Edit</a>
@@ -39,6 +41,17 @@
                 </td>
             </tr>
             {% endfor %}
+
+             
+            <tr>
+                <td>{{ livraisons[0].localisation}}</td>
+                <td>
+                    <a class="btn btn-primary">Show</a>
+                    <a class="btn btn-primary">Edit</a>
+                    <button class="btn btn-primary">Button 3</button>
+                </td>
+            </tr>
+            
         </tbody>
     </table>
 
@@ -57,15 +70,20 @@
         </style>
     <div id="map"></div>
     <script>
-    // Map initialization 
-    var map = L.map('map').setView([ 36.76806 , 10.27528], 18);
 
-    //osm layer
-    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //bech nekhdhou localisation mta3 les colis
+    console.log('livraison n:{{ livraisons[0].localisation}}');
+    let latitude1, longitude1;
+    const apiUrl = 'https://127.0.0.1:8000/localisation/place/{{ livraisons[0].localisation}}';
+    fetch(apiUrl).then(response => response.json()).then(data => {
+        latitude = data.latitude;
+        longitude = data.longitude;
+        // Map initialization 
+        var map = L.map('map').setView([ latitude , longitude], 18);
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
     osm.addTo(map);
-
     if(!navigator.geolocation) {
         console.log("Your browser doesn't support geolocation feature!")
     } else {
@@ -73,7 +91,6 @@
     }
 
     var marker, circle;
-
     function getPosition(position){
         console.log(position)
         var lat = position.coords.latitude
@@ -87,19 +104,22 @@
         if(circle) {
             map.removeLayer(circle)
         }
-
-        console.log(localisation.latitude)
-        console.log(localisation.longtitude)
         
-        marker = L.marker([36.7680, 10.27528])
-        circle = L.circle([36.7680, 10.27528])
+        
+    
+        marker = L.marker([latitude, longitude])
+        circle = L.circle([latitude, longitude])
 
         var featureGroup = L.featureGroup([marker, circle]).addTo(map)
 
         map.fitBounds(featureGroup.getBounds())
 
-        console.log("Your coordinate is: Lat: "+ lat +" Long: "+ long+ " Accuracy: "+ accuracy)
+        
     }
+
+    }).catch(error => console.error('Fetch error:', error));
+
+    
 
 </script>
 

@@ -10,7 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Latitude</th>
-                <th>Longtitude</th>
+                <th>longitude</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ localisation.id }}</td>
                 <td>{{ localisation.latitude }}</td>
-                <td>{{ localisation.longtitude }}</td>
+                <td>{{ localisation.longitude }}</td>
                 <td>
                     <a href="{{ path('app_localisation_show', {'id': localisation.id}) }}">show</a>
                     <a href="{{ path('app_localisation_edit', {'id': localisation.id}) }}">edit</a>

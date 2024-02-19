@@ -13,7 +13,7 @@ class LocalisationType extends AbstractType
     {
         $builder
             ->add('latitude')
-            ->add('longtitude')
+            ->add('longitude')
         ;
     }
 

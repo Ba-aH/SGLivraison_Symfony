@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/localisation')]
 class LocalisationController extends AbstractController
@@ -20,6 +22,22 @@ class LocalisationController extends AbstractController
         return $this->render('localisation/index.html.twig', [
             'localisations' => $localisationRepository->findAll(),
         ]);
+    }
+
+    #[Route('/place/{id}', name: 'place_api',methods: ['GET'])]
+    public function getPlace(ManagerRegistry $doctrine,int $id): JsonResponse
+    {
+        $place = $doctrine->getRepository(Localisation::class)->find($id);
+        if (!$place){
+            return $this->json('No place is found for id' . $id,404);
+        }
+
+        $data = [
+            'id' => $place->getId(),
+            'latitude' => $place->getLatitude(),
+            'longitude' => $place->getLongitude(),          
+        ];
+        return $this->json($data);
     }
 
     #[Route('/new', name: 'app_localisation_new', methods: ['GET', 'POST'])]
@@ -55,7 +73,7 @@ class LocalisationController extends AbstractController
     {
         $form = $this->createForm(LocalisationType::class, $localisation);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
