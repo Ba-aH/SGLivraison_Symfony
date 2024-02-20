@@ -6,61 +6,64 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
-<script src="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
-<link rel="stylesheet" href="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"/>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<link rel="stylesheet" href="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"/>
+<script src="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 <h1>Colis index</h1>
 
 <div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Reference</th>
-                <th>Prix</th>
-                <th>Poid</th>
-                <th>Actions</th>
-                <th>place</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for coli in colis  %}
-            <tr>
-                <td>{{ coli.id }}</td>
-                <td>{{ coli.reference }}</td>
-                <td>{{ coli.prix }}</td>
-                <td>{{ coli.poid }}</td>
-                
-                <td>
-                    <a class="btn btn-primary" href="{{ path('app_colis_show', {'id': coli.id}) }}">Show</a>
-                    <a class="btn btn-primary" href="{{ path('app_colis_edit', {'id': coli.id}) }}">Edit</a>
-                    <button class="btn btn-primary">Button 3</button>
-                </td>
-            </tr>
-            {% endfor %}
+    <section class="pricing-table section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Les colis que tu doit livrer pour aujourd'hui sont</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts</p>
+                </div>
+            </div>
+        </div>
 
-            <tr>
-                <td>{{ livraisons[0].localisation}}</td>
-                <td>
-                    <a class="btn btn-primary">Show</a>
-                    <a class="btn btn-primary">Edit</a>
-                    <button class="btn btn-primary">Button 3</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="row">
+            {% for coli in colis %}
+                <!-- Single Table -->
+                <div class="col-lg-4 col-md-12 col-12">
+                    <div class="single-table">
+                        <!-- Table Head -->
+                        <div class="table-head">
+                            <div class="icon">
+                                <i class="icofont-box"></i>
+                            </div>
+                            <h4 class="title">coli nom</h4>
+                            <div class="price">
+                                <p class="amount">${{ coli.prix }}<span>/ Per Visit</span></p>
+                            </div>
+                        </div>
+                        <!-- Table List -->
+                        <ul class="table-list">
+                            <li><i class="icofont icofont-ui-check"></i>{{ coli.id }}</li>
+                            <li><i class="icofont icofont-ui-check"></i>{{ coli.reference }}</li>
+                            <li class="cross"><i class="icofont icofont-ui-close"></i>{{ coli.poid }}</li>
+                        </ul>
+                        <div class="table-bottom">
+                            <a class="btn" href="#">Book Now</a>
+                        </div>
+                        <!-- Table Bottom -->
+                    </div>
+                </div>
+                <!-- End Single Table -->
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
     <div class='mappeu'>
         <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
+           
             #map {
                 width: 100%;
                 height: 50vh;
@@ -74,7 +77,7 @@
                 fromlongitude = data.fromlongitude;
                 tolatitude = data.tolatitude;
                 tolongitude = data.tolongitude;
-                var map = L.map('map').setView([fromlatitude, fromlongitude], 8);
+                var map = L.map('map').setView([fromlatitude, fromlongitude], 15);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors'
                 }).addTo(map);
@@ -98,4 +101,8 @@
     </div>
 </div>
 
+
+
+
+ 
 {% endblock %}
