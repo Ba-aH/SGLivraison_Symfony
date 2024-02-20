@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use DateTime; 
 
 
 #[Route('/livraison')]
@@ -23,6 +23,58 @@ class LivraisonController extends AbstractController
             'livraisons' => $livraisonRepository->findAll(),
         ]);
     }
+
+    #[Route('/edit_byadmin', name: 'edit_byadmin', methods: ['post'])]
+    public function edit_byadmin( Request $request ,EntityManagerInterface $entityManager,LivraisonRepository $livraisonRepository): Response
+    {
+        
+        $livraisonIdd = $request->request->get('livraisonId');
+        // Check if the Livraison ID exists in the request data
+     
+            // Retrieve the Livraison ID
+           
+    
+            $livraison = $entityManager->getRepository(Livraison::class)->find($livraisonIdd);
+            $dateLivraisonString = $request->request->get('date'); // Assuming 'date_livraison' is the name of your form field
+        
+            // Convert the string to a DateTime object
+            $dateLivraison = DateTime::createFromFormat('Y-m-d', $dateLivraisonString);
+            // Check if the Livraison entity exists
+            if ($livraison) {
+                // Update the Livraison entity with the provided data
+                $livraison->setDateLivraison($dateLivraison);
+                $livraison->setIntervalleTemp($request->request->get('intervalle'));
+    
+                // Persist the changes to the database
+                $entityManager->flush();
+    
+                // Redirect or render a response as needed
+                return $this->render('admin/admin.html.twig', [
+                    'livraisons' => $livraisonRepository->findAll(),
+                ]);
+            } else {
+                // Handle the case where the Livraison entity is not found
+                // You can return an error response or handle it based on your application logic
+                return new Response('Livraison entity not found', Response::HTTP_NOT_FOUND);
+            }
+        
+    }
+
+
+
+    #[Route('/ad-liv', name: 'ad-liv', methods: ['GET'])]
+    public function adliv(LivraisonRepository $livraisonRepository): Response
+    {
+        $livraisonsEchec = $livraisonRepository->findBy(['statut_coursier' => 'echec']);
+
+
+        return $this->render('admin/admin.html.twig',[
+            'livraisons' => $livraisonsEchec,
+        ]);
+    }
+
+
+
 
     #[Route('/{id}/confirm', name: 'confirm', methods: ['GET'])]
     public function confirm(EntityManagerInterface $entityManager,livraisonRepository $livraisonRepository,$id): Response
@@ -42,7 +94,7 @@ class LivraisonController extends AbstractController
     {
         $livraison = $livraisonRepository->find($id);
 
-        $livraison = $livraison->setStatutClient('echec');
+        $livraison = $livraison->setStatutCoursier('echec');
         $entityManager->flush();
 
         return $this->render('livraison/index.html.twig', [

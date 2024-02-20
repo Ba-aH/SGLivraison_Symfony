@@ -11,8 +11,7 @@ class TestTemplateController extends AbstractController
     #[Route('/test/template', name: 'app_test_template')]
     public function index(): Response
     {
-        return $this->render('test_template/index.html.twig', [
-            'controller_name' => 'TestTemplateController',
-        ]);
+        return $this->render('admin/admin.html.twig');
     }
+    
 }

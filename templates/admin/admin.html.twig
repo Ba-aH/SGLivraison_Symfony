@@ -1,0 +1,466 @@
+{% extends 'base.html.twig' %}
+ {% block body %}
+<!-- Coding by CodingLab | www.codinglabweb.com -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+   
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Dashboard Sidebar Menu</title> 
+</head>
+  
+<body>
+ <body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                  
+                     <img src="{{ asset('assets/img/a.jpg') }}" >
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">Codinglab</span>
+                    <span class="profession">Web developer</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#" id="toggleContainer">
+                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                            <span class="text nav-text">modifier utilisateur</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link" id="toggleContainer11">
+                        <a href="#" id="toggleContainer11">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">gerer les echecs</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-pie-chart-alt icon' ></i>
+                            <span class="text nav-text">Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-heart icon' ></i>
+                            <span class="text nav-text">Likes</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-wallet icon' ></i>
+                            <span class="text nav-text">Wallets</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="#">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+    <div class="container" id="container11" style="display: none;  right: -60px;">
+    
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Statut_coursier</th>
+                <th>Statut_client</th>
+                <th>Date_livraison</th>
+                <th>Intervalle_temp</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livraison in livraisons %}
+                <tr>
+                    <td>{{ livraison.id }}</td>
+                    <td>{{ livraison.statutCoursier }}</td>
+                    <td>{{ livraison.statutClient }}</td>
+                    <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td>
+                    <td>{{ livraison.intervalleTemp }}</td>
+                    <td>{{ livraison.prix }}</td>
+                    <td>
+                        <a class="btn btn-primary"  onclick="saveAndPopulateSecondForm({{livraison.id }})" >changer date</a>
+     
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+    
+    
+    
+    </div>
+
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+ <div class="container mt-5" id ="container mt-5" style="display: none;  right: -60px; " >
+        <h2>Form</h2>
+        <form action="edit_byadmin" method="POST">
+            <input type="hidden" id="livraisonId" name="livraisonId" value="" placeholder="aaaa">
+            <div class="form-group">
+                <label for="localisation_id">Localisation ID</label>
+                <input type="number" class="form-control" id="localisation_id" name="localisation_id" readonly>
+            </div>
+
+            <!-- Statut_coursier Field -->
+            <div class="form-group">
+                <label for="statut_coursier">Statut Coursier</label>
+                <input type="text" class="form-control" id="statut_coursier" name="statut_coursier" readonly>
+            </div>
+
+            <!-- Statut_client Field -->
+            <div class="form-group">
+                <label for="statut_client">Statut Client</label>
+                <input type="text" class="form-control" id="statut_client" name="statut_client" readonly>
+            </div>
+
+            <!-- Date_livraison Field -->
+            <div class="form-group">
+                <label for="date_livraison">Date Livraison</label>
+                <input type="date" class="form-control" id="date_livraison" name="date" required>
+            </div>
+
+            <!-- Intervalle_temp Field -->
+            <div class="form-group">
+                <label for="intervalle_temp">Intervalle Temp</label>
+                <input type="text" class="form-control" id="intervalle_temp" name="intervalle">
+            </div>
+
+            <!-- Prix Field -->
+            <div class="form-group">
+                <label for="prix">Prix</label>
+                <input type="text" class="form-control" id="prix" name="prix" readonly>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+     
+
+
+ 
+    <!-- Bootstrap JS (Optional, if you need it) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+        <div class="container" id="container" style="display: none; right: -60px;">
+            <header>Registration</header>
+            <form action="#">
+                <div class="form first">
+                    <div class="details personal">
+                        <span class="title">Personal Details</span>
+                        <div class="fields">
+                            <div class="input-field">
+                                <label>Full Name</label>
+                                <input type="text" placeholder="Enter your name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Date of Birth</label>
+                                <input type="date" placeholder="Enter birth date" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Email</label>
+                                <input type="text" placeholder="Enter your email" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Mobile Number</label>
+                                <input type="number" placeholder="Enter mobile number" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Gender</label>
+                                <select required>
+                                    <option disabled selected>Select gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Others</option>
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <label>Occupation</label>
+                                <input type="text" placeholder="Enter your ccupation" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details ID">
+                        <span class="title">Identity Details</span>
+                        <div class="fields">
+                            <div class="input-field">
+                                <label>ID Type</label>
+                                <input type="text" placeholder="Enter ID type" required>
+                            </div>
+                            <div class="input-field">
+                                <label>ID Number</label>
+                                <input type="number" placeholder="Enter ID number" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Issued Authority</label>
+                                <input type="text" placeholder="Enter issued authority" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Issued State</label>
+                                <input type="text" placeholder="Enter issued state" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Issued Date</label>
+                                <input type="date" placeholder="Enter your issued date" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Expiry Date</label>
+                                <input type="date" placeholder="Enter expiry date" required>
+                            </div>
+                        </div>
+                        <button class="nextBtn">
+                            <span class="btnText">Next</span>
+                            <i class="uil uil-navigator"></i>
+                        </button>
+                    </div> 
+                </div>
+                <div class="form second">
+                    <div class="details address">
+                        <span class="title">Address Details</span>
+                        <div class="fields">
+                            <div class="input-field">
+                                <label>Address Type</label>
+                                <input type="text" placeholder="Permanent or Temporary" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Nationality</label>
+                                <input type="text" placeholder="Enter nationality" required>
+                            </div>
+                            <div class="input-field">
+                                <label>State</label>
+                                <input type="text" placeholder="Enter your state" required>
+                            </div>
+                            <div class="input-field">
+                                <label>District</label>
+                                <input type="text" placeholder="Enter your district" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Block Number</label>
+                                <input type="number" placeholder="Enter block number" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Ward Number</label>
+                                <input type="number" placeholder="Enter ward number" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details family">
+                        <span class="title">Family Details</span>
+                        <div class="fields">
+                            <div class="input-field">
+                                <label>Father Name</label>
+                                <input type="text" placeholder="Enter father name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Mother Name</label>
+                                <input type="text" placeholder="Enter mother name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Grandfather</label>
+                                <input type="text" placeholder="Enter grandfther name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Spouse Name</label>
+                                <input type="text" placeholder="Enter spouse name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Father in Law</label>
+                                <input type="text" placeholder="Father in law name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Mother in Law</label>
+                                <input type="text" placeholder="Mother in law name" required>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <div class="backBtn">
+                                <i class="uil uil-navigator"></i>
+                                <span class="btnText">Back</span>
+                            </div>
+                            
+                            <button class="sumbit">
+                                <span class="btnText">Submit</span>
+                                <i class="uil uil-navigator"></i>
+                            </button>
+                        </div>
+                    </div> 
+                </div>
+            </form>
+        </div>
+    </section>
+ <script>
+    // Function to toggle the visibility of containers
+    function toggleContainer(containerId) {
+        var container = document.getElementById(containerId);
+        var otherContainers = document.querySelectorAll('.container:not(#' + containerId + ')');
+
+        // Hide all other containers
+        otherContainers.forEach(function(container) {
+            container.style.display = "none";
+        });
+
+        // Toggle the visibility of the clicked container
+        if (container.style.display === "none" || container.style.display === "") {
+            container.style.display = "block";
+        } else {
+            container.style.display = "none";
+        }
+    }
+
+    // Event listener for "changer date" button
+    document.querySelectorAll('.btn.btn-primary').forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Show the target container and hide others
+            toggleContainer('container mt-5');
+        });
+    });
+
+    // Event listener for the toggle buttons
+    document.getElementById("toggleContainer").addEventListener("click", function() {
+        toggleContainer("container");
+    });
+
+    document.getElementById("toggleContainer11").addEventListener("click", function() {
+        toggleContainer("container11");
+    });
+
+    document.getElementById("toggleContainer22").addEventListener("click", function() {
+        toggleContainer("container mt-5");
+    });
+</script>
+
+
+
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</body>
+  <script>
+const body = document.querySelector('body'),
+      sidebar = body.querySelector('nav'),
+      toggle = body.querySelector(".toggle"),
+      searchBtn = body.querySelector(".search-box"),
+      modeSwitch = body.querySelector(".toggle-switch"),
+      modeText = body.querySelector(".mode-text");
+
+
+toggle.addEventListener("click" , () =>{
+    sidebar.classList.toggle("close");
+})
+
+searchBtn.addEventListener("click" , () =>{
+    sidebar.classList.remove("close");
+})
+
+modeSwitch.addEventListener("click" , () =>{
+    body.classList.toggle("dark");
+    
+    if(body.classList.contains("dark")){
+        modeText.innerText = "Light mode";
+    }else{
+        modeText.innerText = "Dark mode";
+        
+    }
+});
+
+
+const form = document.querySelector("form"),
+        nextBtn = form.querySelector(".nextBtn"),
+        backBtn = form.querySelector(".backBtn"),
+        allInput = form.querySelectorAll(".first input");
+nextBtn.addEventListener("click", ()=> {
+    allInput.forEach(input => {
+        if(input.value != ""){
+            form.classList.add('secActive');
+        }else{
+            form.classList.remove('secActive');
+        }
+    })
+})
+backBtn.addEventListener("click", () => form.classList.remove('secActive'));
+
+
+   </script>
+     <script>
+    function saveAndPopulateSecondForm(livraisonId) {
+        // Save the livraisonId to local storage (optional)
+        localStorage.setItem('livraisonId', livraisonId);
+        
+        // Populate the hidden input field in the second form
+        document.getElementById('livraisonId').value = livraisonId;
+    }
+</script>
+</html>
+
+
+
+ {% endblock %}
+ 
+      
