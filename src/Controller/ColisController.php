@@ -5,20 +5,27 @@ namespace App\Controller;
 use App\Entity\Colis;
 use App\Form\ColisType;
 use App\Repository\ColisRepository;
+use App\Repository\LivraisonRepository;
+use App\Repository\LocalisationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/colis')]
 class ColisController extends AbstractController
 {
-    #[Route('/', name: 'app_colis_index', methods: ['GET'])]
-    public function index(ColisRepository $colisRepository): Response
-    {
+    #[Route('/{id}', name: 'app_colis_index', methods: ['GET'])]
+    public function index(ColisRepository $colisRepository, $id,LivraisonRepository $livraisonRepository): Response
+        {
+        $colis = $colisRepository->findBy(['livraison' => $id]);
+        $livraisons = $livraisonRepository->findBy(['id' => $id]);
         return $this->render('colis/index.html.twig', [
-            'colis' => $colisRepository->findAll(),
+            'colis' => $colis,
+            'livraisons' => $livraisons,
         ]);
     }
 

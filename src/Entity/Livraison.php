@@ -25,14 +25,17 @@ class Livraison
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_livraison = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $intervalle_temp = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $intervalle_temp = null;
 
     #[ORM\Column]
     private ?float $prix = null;
 
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Colis::class)]
     private Collection $relation;
+
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Localisation $localisation = null;
 
     public function __construct()
     {
@@ -80,12 +83,12 @@ class Livraison
         return $this;
     }
 
-    public function getIntervalleTemp(): ?\DateTimeInterface
+    public function getIntervalleTemp(): ?string
     {
         return $this->intervalle_temp;
     }
 
-    public function setIntervalleTemp(\DateTimeInterface $intervalle_temp): static
+    public function setIntervalleTemp(?string $intervalle_temp): static
     {
         $this->intervalle_temp = $intervalle_temp;
 
@@ -136,6 +139,18 @@ class Livraison
     public function __toString()
     {
         return $this->id;
+    }
+
+    public function getLocalisation(): ?Localisation
+    {
+        return $this->localisation;
+    }
+
+    public function setLocalisation(?Localisation $localisation): static
+    {
+        $this->localisation = $localisation;
+
+        return $this;
     }
 
 }

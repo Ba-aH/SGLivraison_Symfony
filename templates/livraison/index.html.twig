@@ -3,8 +3,12 @@
 {% block title %}Livraison index{% endblock %}
 
 {% block body %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <h1>Livraison index</h1>
-
+<div class="container">
     <table class="table">
         <thead>
             <tr>
@@ -14,30 +18,35 @@
                 <th>Date_livraison</th>
                 <th>Intervalle_temp</th>
                 <th>Prix</th>
+                <th>place</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for livraison in livraisons %}
-            <tr>
-                <td>{{ livraison.id }}</td>
-                <td>{{ livraison.statutCoursier }}</td>
-                <td>{{ livraison.statutClient }}</td>
-                <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td>
-                <td>{{ livraison.intervalleTemp ? livraison.intervalleTemp|date('H:i:s') : '' }}</td>
-                <td>{{ livraison.prix }}</td>
-                <td>
-                    <a href="{{ path('app_livraison_show', {'id': livraison.id}) }}">show</a>
-                    <a href="{{ path('app_livraison_edit', {'id': livraison.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for livraison in livraisons %}
+                <tr>
+                    <td>{{ livraison.id }}</td>
+                    <td>{{ livraison.statutCoursier }}</td>
+                    <td>{{ livraison.statutClient }}</td>
+                    <td>{{ livraison.dateLivraison ? livraison.dateLivraison|date('Y-m-d') : '' }}</td>
+                    <td>{{ livraison.intervalleTemp }}</td>
+                    <td>{{ livraison.prix }}</td>
+                    <td>{{ livraison.localisation }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('app_colis_index', {'id': livraison.id}) }}">Inspecter</a>
+                        {# <a class="btn btn-primary" href="{{ path('app_colis_index', {'id': livraison.id, 'localisation': livraison.localisation.id }) }}">Inspecter</a> #}
+                        <a class="btn btn-primary" href="{{ path('confirm', {'id': livraison.id}) }}">Confirmer</a>
+                        <a class="btn btn-danger" href="{{ path('echec', {'id': livraison.id}) }}">Signaler un echec</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">no records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <a href="{{ path('app_livraison_new') }}">Create new</a>
+    </div>
 {% endblock %}

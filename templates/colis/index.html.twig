@@ -3,37 +3,106 @@
 {% block title %}Colis index{% endblock %}
 
 {% block body %}
-    <h1>Colis index</h1>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Reference</th>
-                <th>Prix</th>
-                <th>Poid</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for coli in colis %}
-            <tr>
-                <td>{{ coli.id }}</td>
-                <td>{{ coli.reference }}</td>
-                <td>{{ coli.prix }}</td>
-                <td>{{ coli.poid }}</td>
-                <td>
-                    <a href="{{ path('app_colis_show', {'id': coli.id}) }}">show</a>
-                    <a href="{{ path('app_colis_edit', {'id': coli.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<link rel="stylesheet" href="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"/>
+<script src="templates/leaflet/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+<h1>Colis index</h1>
 
-    <a href="{{ path('app_colis_new') }}">Create new</a>
+<div class="container">
+    <section class="pricing-table section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Les colis que tu doit livrer pour aujourd'hui sont</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit praesent aliquet. pretiumts</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for coli in colis %}
+                <!-- Single Table -->
+                <div class="col-lg-4 col-md-12 col-12">
+                    <div class="single-table">
+                        <!-- Table Head -->
+                        <div class="table-head">
+                            <div class="icon">
+                                <i class="icofont-box"></i>
+                            </div>
+                            <h4 class="title">coli nom</h4>
+                            <div class="price">
+                                <p class="amount">${{ coli.prix }}<span>/ Per Visit</span></p>
+                            </div>
+                        </div>
+                        <!-- Table List -->
+                        <ul class="table-list">
+                            <li><i class="icofont icofont-ui-check"></i>{{ coli.id }}</li>
+                            <li><i class="icofont icofont-ui-check"></i>{{ coli.reference }}</li>
+                            <li class="cross"><i class="icofont icofont-ui-close"></i>{{ coli.poid }}</li>
+                        </ul>
+                        <div class="table-bottom">
+                            <a class="btn" href="#">Book Now</a>
+                        </div>
+                        <!-- Table Bottom -->
+                    </div>
+                </div>
+                <!-- End Single Table -->
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+    <div class='mappeu'>
+        <style>
+           
+            #map {
+                width: 100%;
+                height: 50vh;
+            }
+        </style>
+        <div id="map"></div>
+        <script>
+            const apiUrl = 'https://127.0.0.1:8000/localisation/place/{{ livraisons[0].localisation}}';
+            fetch(apiUrl).then(response => response.json()).then(data => {
+                fromlatitude = data.fromlatitude;
+                fromlongitude = data.fromlongitude;
+                tolatitude = data.tolatitude;
+                tolongitude = data.tolongitude;
+                var map = L.map('map').setView([fromlatitude, fromlongitude], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                var marker1 = L.marker([fromlatitude, fromlongitude]).addTo(map);
+                var marker2 = L.marker([tolatitude, tolongitude]).addTo(map);
+
+                // Check if L.Routing is defined
+                if (L.Routing) {
+                    L.Routing.control({
+                        waypoints: [
+                            L.latLng(fromlatitude, fromlongitude),
+                            L.latLng(tolatitude, tolongitude)
+                        ]
+                    }).addTo(map);
+                } else {
+                    console.error('Leaflet Routing Machine library is not loaded properly.');
+                } 
+             }).catch(error => console.error('Fetch error:', error));
+        </script>
+    </div>
+</div>
+
+
+
+
+ 
 {% endblock %}

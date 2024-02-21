@@ -11,12 +11,40 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+
 #[Route('/livraison')]
 class LivraisonController extends AbstractController
 {
     #[Route('/', name: 'app_livraison_index', methods: ['GET'])]
     public function index(LivraisonRepository $livraisonRepository): Response
     {
+        return $this->render('livraison/index.html.twig', [
+            'livraisons' => $livraisonRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/{id}/confirm', name: 'confirm', methods: ['GET'])]
+    public function confirm(EntityManagerInterface $entityManager,livraisonRepository $livraisonRepository,$id): Response
+    {
+        $livraison = $livraisonRepository->find($id);
+
+        $livraison = $livraison->setStatutCoursier('confirme');
+        $entityManager->flush();
+
+        return $this->render('livraison/index.html.twig', [
+            'livraisons' => $livraisonRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/{id}/echec', name: 'echec', methods: ['GET'])]
+    public function echec(EntityManagerInterface $entityManager,livraisonRepository $livraisonRepository,$id): Response
+    {
+        $livraison = $livraisonRepository->find($id);
+
+        $livraison = $livraison->setStatutClient('echec');
+        $entityManager->flush();
+
         return $this->render('livraison/index.html.twig', [
             'livraisons' => $livraisonRepository->findAll(),
         ]);
